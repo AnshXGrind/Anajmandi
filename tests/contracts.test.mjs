@@ -9,6 +9,12 @@ test('auth form contains confirmation and terms fields', async () => {
   assert.match(source, /requiresEmailConfirmation/)
 })
 
+test('login page provides direct access to the public marketplace', async () => {
+  const source = await readFile('src/app/login/page.tsx', 'utf8')
+  assert.match(source, /Skip login and browse marketplace/)
+  assert.match(source, /href="\/marketplace"/)
+})
+
 test('offer acceptance does not accept a caller-supplied actor id', async () => {
   const source = await readFile('supabase/migrations/202611120002_harden_farm_link_authorization.sql', 'utf8')
   assert.match(source, /auth\.uid\(\)/)
