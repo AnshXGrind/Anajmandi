@@ -23,3 +23,4 @@ The repair branch must be pushed and deployed with `NEXT_PUBLIC_SUPABASE_URL`, `
 
 - Implemented and tested: root-layout type repair, CI E2E contract step, frozen install, and production build.
 - Implemented but externally unverified: both Vercel project settings and deployment logs.
+- Live deployment diagnosis: the marketplace database error is not a Next.js build error. The configured Supabase REST API returns `PGRST205` for `public.produce_listings`, indicating the base migration has not been applied to that target project.

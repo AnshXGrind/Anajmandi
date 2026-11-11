@@ -24,6 +24,16 @@ test('profile hardening protects moderation fields and private profile typing', 
   assert.match(generatedTypes, /get_my_private_profile: \{ Args: Record<string, never>; Returns: PrivateProfile\[\] \}/)
 })
 
+test('location migration and dependent selectors are present', async () => {
+  const migration = await readFile('supabase/migrations/202611120004_india_location_master.sql', 'utf8')
+  const picker = await readFile('src/components/location-picker.tsx', 'utf8')
+  assert.match(migration, /create table if not exists public\.india_states/)
+  assert.match(migration, /create table if not exists public\.india_districts/)
+  assert.match(migration, /foreign key \(lgd_district_code, lgd_state_code\)/)
+  assert.match(picker, /setDistrictCode\(''\)/)
+  assert.match(picker, /disabled={!stateCode}/)
+})
+
 test('offer acceptance does not accept a caller-supplied actor id', async () => {
   const source = await readFile('supabase/migrations/202611120002_harden_farm_link_authorization.sql', 'utf8')
   assert.match(source, /auth\.uid\(\)/)

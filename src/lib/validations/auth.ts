@@ -25,6 +25,9 @@ export const registerSchema = z
       .regex(/[0-9]/, 'Password must contain at least one number'),
     confirm_password: z.string(),
     state: z.string().min(1, 'Please select your state'),
+    district: z.string().min(1, 'Please select your district'),
+    lgd_state_code: z.coerce.number().int().positive('Please select your state'),
+    lgd_district_code: z.coerce.number().int().positive('Please select your district'),
     agree_terms: z.boolean().refine((val) => val === true, {
       message: 'You must agree to the terms and conditions',
     }),

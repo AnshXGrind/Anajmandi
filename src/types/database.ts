@@ -27,6 +27,8 @@ export type PrivateProfile = {
   verification_status: VerificationStatus
   state: string | null
   district: string | null
+  lgd_state_code: number | null
+  lgd_district_code: number | null
   pincode: string | null
   address: string | null
   is_active: boolean
@@ -48,6 +50,8 @@ export interface Database {
           verification_status: VerificationStatus
           state: string | null
           district: string | null
+          lgd_state_code: number | null
+          lgd_district_code: number | null
           pincode: string | null
           address: string | null
           is_active: boolean
@@ -64,6 +68,8 @@ export interface Database {
           verification_status?: VerificationStatus
           state?: string | null
           district?: string | null
+          lgd_state_code?: number | null
+          lgd_district_code?: number | null
           pincode?: string | null
           address?: string | null
           is_active?: boolean
@@ -80,6 +86,8 @@ export interface Database {
           verification_status?: VerificationStatus
           state?: string | null
           district?: string | null
+          lgd_state_code?: number | null
+          lgd_district_code?: number | null
           pincode?: string | null
           address?: string | null
           is_active?: boolean
@@ -258,6 +266,8 @@ export interface Database {
           available_until: string | null
           state: string
           district: string
+          lgd_state_code: number | null
+          lgd_district_code: number | null
           pincode: string | null
           status: ListingStatus
           view_count: number
@@ -280,6 +290,8 @@ export interface Database {
           available_until?: string | null
           state: string
           district: string
+          lgd_state_code?: number | null
+          lgd_district_code?: number | null
           pincode?: string | null
           status?: ListingStatus
           view_count?: number
@@ -300,6 +312,8 @@ export interface Database {
           available_until?: string | null
           state?: string
           district?: string
+          lgd_state_code?: number | null
+          lgd_district_code?: number | null
           pincode?: string | null
           status?: ListingStatus
           view_count?: number

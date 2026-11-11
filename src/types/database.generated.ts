@@ -7,8 +7,8 @@ export type OfferStatus = 'pending' | 'accepted' | 'rejected' | 'expired' | 'wit
 export type OrderStatus = 'pending' | 'confirmed' | 'processing' | 'in_transit' | 'delivered' | 'completed' | 'cancelled' | 'disputed'
 export type PaymentStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'refunded'
 type Table<Row, Insert = Partial<Row>, Update = Partial<Row>> = { Row: Row; Insert: Insert; Update: Update; Relationships: [] }
-type Profile = { id:string; email:string; full_name:string; phone:string|null; avatar_url:string|null; role:UserRole; verification_status:VerificationStatus; state:string|null; district:string|null; pincode:string|null; address:string|null; is_active:boolean; created_at:string; updated_at:string }
-type Listing = { id:string; farmer_id:string; category_id:string|null; title:string; description:string|null; variety:string|null; quality_grade:QualityGrade; price_per_kg:number; quantity_kg:number; available_quantity_kg:number; unit:string; harvest_date:string|null; available_from:string|null; available_until:string|null; pickup_address:string; state:string; district:string; status:ListingStatus; created_at:string; updated_at:string }
+type Profile = { id:string; email:string; full_name:string; phone:string|null; avatar_url:string|null; role:UserRole; verification_status:VerificationStatus; state:string|null; district:string|null; lgd_state_code:number|null; lgd_district_code:number|null; pincode:string|null; address:string|null; is_active:boolean; created_at:string; updated_at:string }
+type Listing = { id:string; farmer_id:string; category_id:string|null; title:string; description:string|null; variety:string|null; quality_grade:QualityGrade; price_per_kg:number; quantity_kg:number; available_quantity_kg:number; unit:string; harvest_date:string|null; available_from:string|null; available_until:string|null; pickup_address:string; state:string; district:string; lgd_state_code:number|null; lgd_district_code:number|null; status:ListingStatus; created_at:string; updated_at:string }
 type Offer = { id:string; listing_id:string; buyer_id:string; farmer_id:string; quantity_kg:number; offered_price_per_kg:number; message:string|null; status:OfferStatus; created_at:string; updated_at:string }
 type Category = { id:string; name:string; slug:string; created_at:string }
 type Image = { id:string; listing_id:string; storage_path:string; alt_text:string|null; sort_order:number; created_at:string }
@@ -17,11 +17,15 @@ type OrderItem = { id:string; order_id:string; listing_id:string; quantity_kg:nu
 type OrderHistory = { id:string; order_id:string; status:OrderStatus; notes:string|null; changed_by:string|null; created_at:string }
 type Payment = { id:string; order_id:string; buyer_id:string; razorpay_order_id:string|null; razorpay_payment_id:string|null; razorpay_signature:string|null; amount:number; currency:string; status:PaymentStatus; failure_reason:string|null; created_at:string; updated_at:string }
 type PrivateProfile = { id:string; email:string; full_name:string; phone:string|null; avatar_url:string|null; role:UserRole; verification_status:VerificationStatus; state:string|null; district:string|null; pincode:string|null; address:string|null; is_active:boolean; created_at:string; updated_at:string }
+type IndiaState = { lgd_state_code:number; name_en:string; name_local:string|null; entity_type:'State'|'Union Territory'; is_active:boolean; source_updated_at:string|null; created_at:string; updated_at:string }
+type IndiaDistrict = { lgd_district_code:number; lgd_state_code:number; name_en:string; name_local:string|null; is_active:boolean; source_updated_at:string|null; created_at:string; updated_at:string }
 
 export interface FarmLinkDatabase {
   public: {
     Tables: {
       profiles: Table<Profile, Omit<Profile,'created_at'|'updated_at'|'verification_status'|'is_active'> & Partial<Pick<Profile,'verification_status'|'is_active'|'created_at'|'updated_at'>>, Partial<Profile>>
+      india_states: Table<IndiaState, Omit<IndiaState,'created_at'|'updated_at'> & Partial<Pick<IndiaState,'created_at'|'updated_at'>>, Partial<IndiaState>>
+      india_districts: Table<IndiaDistrict, Omit<IndiaDistrict,'created_at'|'updated_at'> & Partial<Pick<IndiaDistrict,'created_at'|'updated_at'>>, Partial<IndiaDistrict>>
       produce_categories: Table<Category, Omit<Category,'id'|'created_at'> & Partial<Pick<Category,'id'|'created_at'>>>
       produce_listings: Table<Listing, Omit<Listing,'id'|'created_at'|'updated_at'|'available_quantity_kg'|'status'> & Partial<Pick<Listing,'id'|'created_at'|'updated_at'|'available_quantity_kg'|'status'>>, Partial<Listing>>
       produce_images: Table<Image, Omit<Image,'id'|'created_at'> & Partial<Pick<Image,'id'|'created_at'>>, Partial<Image>>

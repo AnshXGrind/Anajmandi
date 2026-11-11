@@ -9,6 +9,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/**/*.test.mjs",
+    "test:locations": "node scripts/validate-lgd.mjs",
     "test:e2e": "node --test tests/e2e/**/*.test.mjs"
   },
   "dependencies": {

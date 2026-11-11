@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { LocationPicker } from '@/components/location-picker'
 
 export function ListingForm() {
   const router = useRouter()
@@ -39,8 +40,7 @@ export function ListingForm() {
     <label>Price per kg<input className="input" name="price_per_kg" type="number" min="0.01" step="0.01" required /></label>
     <label>Quantity in kg<input className="input" name="quantity_kg" type="number" min="0.01" step="0.01" required /></label>
     <label>Pickup address<input className="input" name="pickup_address" required minLength={3} /></label>
-    <label>State<input className="input" name="state" required minLength={2} /></label>
-    <label>District<input className="input" name="district" required minLength={2} /></label>
+    <LocationPicker />
     {error&&<div className="error-text" role="alert">{error}</div>}
     <button className="button" disabled={busy}>{busy?'Publishing…':'Publish listing'}</button>
   </form>
