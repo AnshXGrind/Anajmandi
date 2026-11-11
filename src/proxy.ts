@@ -10,6 +10,7 @@ export async function proxy(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   const protectedPath = ['/dashboard', '/farmer', '/buyer', '/logistics', '/admin'].some((path) => request.nextUrl.pathname.startsWith(path))
   if (protectedPath && !user) { const redirectUrl=request.nextUrl.clone(); redirectUrl.pathname='/login'; redirectUrl.searchParams.set('next',request.nextUrl.pathname); return NextResponse.redirect(redirectUrl) }
+  if (protectedPath && user) { const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle(); const role=(profile as unknown as {role?:string}|null)?.role; const allowed=request.nextUrl.pathname.startsWith('/farmer/')?role==='farmer':request.nextUrl.pathname.startsWith('/buyer/')?role==='buyer':request.nextUrl.pathname.startsWith('/logistics/')?role==='logistics_provider':request.nextUrl.pathname.startsWith('/admin/')?role==='admin':true; if(!allowed){const redirectUrl=request.nextUrl.clone();redirectUrl.pathname=role==='farmer'?'/farmer/dashboard':role==='buyer'?'/buyer/dashboard':role==='logistics_provider'?'/logistics/dashboard':role==='admin'?'/admin/dashboard':'/login';return NextResponse.redirect(redirectUrl)}}
   return response
 }
 export const config = { matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'] }

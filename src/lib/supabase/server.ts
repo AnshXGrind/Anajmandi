@@ -1,12 +1,12 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
-import type { Database } from '@/types/database'
+import type { FarmLinkDatabase } from '@/types/database.generated'
 import { getPublicEnv } from '@/lib/env'
 
 export async function createClient() {
   const env = getPublicEnv()
   const cookieStore = await cookies()
-  return createServerClient<Database>(
+  return createServerClient<FarmLinkDatabase>(
     env.NEXT_PUBLIC_SUPABASE_URL,
     env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
