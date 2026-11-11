@@ -13,8 +13,13 @@ Vercel failed while prerendering `/login` because `useSearchParams()` was called
 
 ## Verification
 
-`pnpm build` passes on Next.js 16.4.6 and generates all 25 routes. The `/login` prerender error is no longer present.
+`pnpm.cmd install --frozen-lockfile`, `pnpm.cmd lint`, `pnpm.cmd typecheck`, `pnpm.cmd test`, `pnpm.cmd test:e2e`, and `pnpm.cmd build` pass on Next.js 16.4.6. The build generates 26 routes. The root layout now uses React's `ReactNode`, avoiding reliance on generated `LayoutProps` during standalone typechecking.
 
 ## Deployment note
 
 The repair branch must be pushed and deployed with `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `NEXT_PUBLIC_SITE_URL` configured in Vercel. A live Vercel deployment was not changed from this workspace.
+
+## Status
+
+- Implemented and tested: root-layout type repair, CI E2E contract step, frozen install, and production build.
+- Implemented but externally unverified: both Vercel project settings and deployment logs.

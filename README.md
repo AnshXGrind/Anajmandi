@@ -18,7 +18,10 @@ The current vertical slice includes public marketplace discovery, registration, 
 
 ```bash
 pnpm lint
-pnpm exec tsc --noEmit
-pnpm build
+pnpm typecheck
 pnpm test
+pnpm test:e2e
+pnpm build
 ```
+
+Current status: public marketplace discovery, authenticated listing creation, buyer offers, atomic offer acceptance, live farmer/buyer dashboard overviews, safe login redirects, profile-field hardening, and auth endpoint rate limiting are implemented and validated locally. Payments, logistics, storage, messaging, admin mutations, real browser automation, and deployed-environment verification remain outside the locally verified slice.

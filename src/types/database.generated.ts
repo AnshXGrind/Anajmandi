@@ -16,6 +16,7 @@ type Order = { id:string; order_number:string; buyer_id:string; farmer_id:string
 type OrderItem = { id:string; order_id:string; listing_id:string; quantity_kg:number; agreed_price_per_kg:number; total_amount:number }
 type OrderHistory = { id:string; order_id:string; status:OrderStatus; notes:string|null; changed_by:string|null; created_at:string }
 type Payment = { id:string; order_id:string; buyer_id:string; razorpay_order_id:string|null; razorpay_payment_id:string|null; razorpay_signature:string|null; amount:number; currency:string; status:PaymentStatus; failure_reason:string|null; created_at:string; updated_at:string }
+type PrivateProfile = { id:string; email:string; full_name:string; phone:string|null; avatar_url:string|null; role:UserRole; verification_status:VerificationStatus; state:string|null; district:string|null; pincode:string|null; address:string|null; is_active:boolean; created_at:string; updated_at:string }
 
 export interface FarmLinkDatabase {
   public: {
@@ -31,7 +32,7 @@ export interface FarmLinkDatabase {
       payment_transactions: Table<Payment, Omit<Payment,'id'|'created_at'|'updated_at'|'status'|'currency'> & Partial<Pick<Payment,'id'|'created_at'|'updated_at'|'status'|'currency'>>, Partial<Payment>>
     }
     Views: { public_farmer_profiles: { Row: Pick<Profile,'id'|'full_name'|'verification_status'|'state'|'district'>; Relationships: [] } }
-    Functions: { accept_offer: { Args: { offer_id:string }; Returns: Json }; reject_offer: { Args: { offer_id:string }; Returns: undefined }; withdraw_offer: { Args: { offer_id:string }; Returns: undefined }; get_my_private_profile: { Args: Record<string, never>; Returns: Json } }
+    Functions: { accept_offer: { Args: { offer_id:string }; Returns: Json }; reject_offer: { Args: { offer_id:string }; Returns: undefined }; withdraw_offer: { Args: { offer_id:string }; Returns: undefined }; get_my_private_profile: { Args: Record<string, never>; Returns: PrivateProfile[] } }
     Enums: { user_role: UserRole; verification_status: VerificationStatus; listing_status: ListingStatus; quality_grade: QualityGrade; offer_status: OfferStatus; order_status: OrderStatus; payment_status: PaymentStatus }
     CompositeTypes: Record<string, never>
   }

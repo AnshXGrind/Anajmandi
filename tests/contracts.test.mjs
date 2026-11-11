@@ -13,6 +13,15 @@ test('login page provides direct access to the public marketplace', async () => 
   const source = await readFile('src/app/login/page.tsx', 'utf8')
   assert.match(source, /Skip login and browse marketplace/)
   assert.match(source, /href="\/marketplace"/)
+  assert.match(source, /safeRedirectPath/)
+})
+
+test('profile hardening protects moderation fields and private profile typing', async () => {
+  const migration = await readFile('supabase/migrations/202611120003_harden_profile_updates.sql', 'utf8')
+  const generatedTypes = await readFile('src/types/database.generated.ts', 'utf8')
+  assert.match(migration, /verification_status is distinct from old\.verification_status/)
+  assert.match(migration, /is_active is distinct from old\.is_active/)
+  assert.match(generatedTypes, /get_my_private_profile: \{ Args: Record<string, never>; Returns: PrivateProfile\[\] \}/)
 })
 
 test('offer acceptance does not accept a caller-supplied actor id', async () => {

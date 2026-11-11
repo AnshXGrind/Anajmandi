@@ -13,6 +13,7 @@ export type {
   StorageType,
   NotificationType,
   DisputeStatus,
+  PrivateProfile,
   Profile,
   FarmerProfile,
   BuyerProfile,

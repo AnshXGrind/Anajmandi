@@ -2,7 +2,7 @@
 
 Audit date: 2026-11-12
 
-## Fully implemented in the current repository
+## Implemented and tested in the current repository
 
 - Next.js 16.4.6 app shell with responsive FarmLink branding and public pages.
 - Zod-validated auth/listing/offer route handlers.
@@ -10,27 +10,32 @@ Audit date: 2026-11-12
 - `src/proxy.ts` session refresh and unauthenticated redirects for protected route prefixes.
 - Core SQL migration with UUID keys, constraints, indexes, RLS, auth profile trigger, and an atomic offer acceptance function.
 - Live marketplace query path with pagination support and honest empty/configuration states.
-- TypeScript compilation passes.
+- TypeScript compilation and production build pass.
+- Authenticated farmer and buyer dashboard overview queries and farmer listing creation form.
+- Marketplace category, location, quality, sorting, pagination, and distinct query-error state.
 
-## Implemented but needs external credentials or environment verification
+## Implemented but externally unverified
 
 - Supabase authentication and live listing/offer/order workflow: requires applying the migration to a Supabase project and configuring `.env.local`.
 - Password recovery: requires Supabase email redirect/template configuration.
-- Protected dashboards: route protection exists, but dashboard feature panels remain the next product slice.
+- Protected dashboards: route protection and live overview panels exist; live Supabase account verification remains external.
 
 ## Partially implemented
 
-- Farmer-to-buyer workflow: listing creation, offer creation, and acceptance are wired; listing editing/upload, negotiation UI, payment initiation, delivery tracking, and farmer/buyer live dashboard queries remain.
-- Database type file: it predates the new migration and should be regenerated from the deployed Supabase schema before expanding typed data access.
+- Farmer-to-buyer workflow: listing creation, offer creation, and acceptance are wired; listing editing/upload, negotiation UI, payment initiation, delivery tracking, and full dashboard mutations remain.
+- E2E testing: only environment/contract coverage exists; real two-account browser testing remains.
 
 ## Not implemented
 
 - Razorpay test-mode order/signature/webhook integration.
 - Logistics vehicles/requests/bookings, cold storage capacity, chat, notifications, reviews, disputes, admin mutations, Telugu localization, image upload/compression, and AI insights.
-- Automated unit, integration, and browser test suites.
+- Razorpay, logistics, cold storage, messaging, notifications, reviews, disputes, admin mutations, Telugu localization, and browser automation.
 
 ## Validation notes
 
-- `pnpm.cmd exec tsc --noEmit`: passing.
-- `pnpm.cmd lint`: must be rerun after the database-client lint cleanup.
-- `pnpm.cmd build`: compiled successfully before the restricted local runner returned `spawn EPERM` during Next's worker step; this is an environment restriction, not a reported application compilation error.
+- `pnpm.cmd install --frozen-lockfile`: passing.
+- `pnpm.cmd lint`: passing.
+- `pnpm.cmd typecheck`: passing.
+- `pnpm.cmd test`: passing (6 contracts).
+- `pnpm.cmd test:e2e`: passing (environment contract only).
+- `pnpm.cmd build`: passing (26 routes).

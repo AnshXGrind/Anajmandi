@@ -17,6 +17,22 @@ export type TransportStatus = 'available' | 'booked' | 'in_transit' | 'completed
 export type StorageType = 'cold_storage' | 'warehouse' | 'silo'
 export type NotificationType = 'offer_received' | 'offer_accepted' | 'offer_rejected' | 'order_confirmed' | 'order_delivered' | 'payment_received' | 'new_message' | 'system'
 export type DisputeStatus = 'open' | 'investigating' | 'resolved' | 'closed'
+export type PrivateProfile = {
+  id: string
+  email: string
+  full_name: string
+  phone: string | null
+  avatar_url: string | null
+  role: UserRole
+  verification_status: VerificationStatus
+  state: string | null
+  district: string | null
+  pincode: string | null
+  address: string | null
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
 
 export interface Database {
   public: {
@@ -927,7 +943,7 @@ export interface Database {
       accept_offer: { Args: { offer_id: string }; Returns: Json }
       reject_offer: { Args: { offer_id: string }; Returns: undefined }
       withdraw_offer: { Args: { offer_id: string }; Returns: undefined }
-      get_my_private_profile: { Args: Record<string, never>; Returns: Json }
+      get_my_private_profile: { Args: Record<string, never>; Returns: PrivateProfile[] }
     }
     Enums: {
       user_role: UserRole
