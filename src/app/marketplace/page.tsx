@@ -6,7 +6,7 @@ import type { ProduceListing } from '@/types'
 export default async function MarketplacePage({ searchParams }: { searchParams: Promise<{ q?: string; state?: string }> }) {
   const params = await searchParams
   let listings: ProduceListing[] = []
-  let configured = hasSupabaseConfig()
+  const configured = hasSupabaseConfig()
   if (configured) {
     const supabase = await createClient()
     let query = supabase.from('produce_listings').select('*').eq('status', 'active').order('created_at', { ascending: false }).limit(24)
