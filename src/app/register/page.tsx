@@ -1,0 +1,2 @@
+import { AuthForm } from '@/components/auth-form'
+export default function RegisterPage(){return <main className="auth-wrap"><div className="auth-card"><div className="eyebrow">Join the network</div><h1>Make your next trade direct.</h1><p className="muted">Create a free account for your farm or buying business.</p><AuthForm mode="register"/><p className="auth-note">Already have an account? <a className="arrow-link" href="/login">Log in →</a></p></div></main>}

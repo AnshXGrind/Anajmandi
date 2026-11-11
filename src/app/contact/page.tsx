@@ -1,0 +1,1 @@
+export default function ContactPage(){return <main><section className="page-hero"><div className="container"><div className="eyebrow">Contact</div><h1>Let’s talk about your market.</h1><p className="muted">For onboarding, partnerships, or support, write to <a className="arrow-link" href="mailto:support@farmlink.in">support@farmlink.in</a>.</p></div></section></main>}

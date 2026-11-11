@@ -1,0 +1,2 @@
+import { AuthForm } from '@/components/auth-form'
+export default function LoginPage(){return <main className="auth-wrap"><div className="auth-card"><div className="eyebrow">Welcome back</div><h1>Log in to FarmLink.</h1><p className="muted">Pick up where your market left off.</p><AuthForm mode="login"/><p className="auth-note">New to FarmLink? <a className="arrow-link" href="/register">Create an account →</a></p></div></main>}
