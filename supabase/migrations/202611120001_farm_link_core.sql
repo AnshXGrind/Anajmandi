@@ -81,3 +81,21 @@ create policy history_participant_read on public.order_status_history for select
 create policy payments_buyer_read on public.payment_transactions for select using (buyer_id = auth.uid());
 
 insert into public.produce_categories (name, slug) values ('Grains & Cereals','grains'),('Vegetables','vegetables'),('Fruits','fruits'),('Pulses & Legumes','pulses'),('Spices & Herbs','spices') on conflict (slug) do nothing;
+
+create or replace function public.accept_offer(offer_id uuid, actor_id uuid) returns jsonb language plpgsql security definer set search_path = public as $$
+declare offer_row public.buyer_offers; listing_row public.produce_listings; order_row public.orders;
+begin
+  select * into offer_row from public.buyer_offers where id = offer_id for update;
+  if offer_row.id is null or offer_row.farmer_id <> actor_id or offer_row.status <> 'pending' then raise exception 'Offer cannot be accepted'; end if;
+  select * into listing_row from public.produce_listings where id = offer_row.listing_id for update;
+  if listing_row.available_quantity_kg < offer_row.quantity_kg or listing_row.status <> 'active' then raise exception 'Listing quantity is no longer available'; end if;
+  update public.buyer_offers set status='accepted', updated_at=now() where id=offer_row.id;
+  update public.buyer_offers set status='rejected', updated_at=now() where listing_id=offer_row.listing_id and id<>offer_row.id and status='pending';
+  update public.produce_listings set available_quantity_kg=available_quantity_kg-offer_row.quantity_kg, status=case when available_quantity_kg-offer_row.quantity_kg=0 then 'sold' else status end, updated_at=now() where id=listing_row.id;
+  insert into public.orders (buyer_id,farmer_id,offer_id,subtotal,platform_fee,total_amount) values (offer_row.buyer_id,offer_row.farmer_id,offer_row.id,offer_row.quantity_kg*offer_row.offered_price_per_kg,(offer_row.quantity_kg*offer_row.offered_price_per_kg)*0.025,(offer_row.quantity_kg*offer_row.offered_price_per_kg)*1.025) returning * into order_row;
+  insert into public.order_items (order_id,listing_id,quantity_kg,agreed_price_per_kg) values(order_row.id,offer_row.listing_id,offer_row.quantity_kg,offer_row.offered_price_per_kg);
+  insert into public.order_status_history(order_id,status,changed_by) values(order_row.id,'pending',actor_id);
+  return jsonb_build_object('order_id',order_row.id,'order_number',order_row.order_number);
+end; $$;
+revoke all on function public.accept_offer(uuid,uuid) from public;
+grant execute on function public.accept_offer(uuid,uuid) to authenticated;

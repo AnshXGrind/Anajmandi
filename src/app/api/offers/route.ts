@@ -1,0 +1,7 @@
+import { NextResponse } from 'next/server'
+import { z } from 'zod'
+import { createClient } from '@/lib/supabase/server'
+import { jsonError } from '@/lib/api'
+import { AuthError, ForbiddenError, NotFoundError } from '@/lib/utils/errors'
+const offerSchema=z.object({listing_id:z.string().uuid(),quantity_kg:z.coerce.number().positive(),offered_price_per_kg:z.coerce.number().positive(),message:z.string().max(1000).optional()})
+export async function POST(request:Request){try{const input=offerSchema.parse(await request.json());const supabase=await createClient();const {data:{user}}=await supabase.auth.getUser();if(!user)throw new AuthError();const profile=await supabase.from('profiles').select('role').eq('id',user.id).single();if(profile.data?.role!=='buyer')throw new ForbiddenError('Only buyers can make offers');const listing=await supabase.from('produce_listings').select('farmer_id,available_quantity_kg,status').eq('id',input.listing_id).single();if(!listing.data||listing.data.status!=='active')throw new NotFoundError('Listing');if(input.quantity_kg>listing.data.available_quantity_kg)throw new Error('Requested quantity is greater than the available quantity');const {data,error}=await supabase.from('buyer_offers').insert({...input,buyer_id:user.id,farmer_id:listing.data.farmer_id}).select().single();if(error)throw error;return NextResponse.json({data},{status:201})}catch(error){return jsonError(error)}}
