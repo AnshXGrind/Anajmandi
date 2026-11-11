@@ -13,6 +13,13 @@ function first(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value
 }
 
+function getQueryErrorMessage(message: string) {
+  if (message.includes('PGRST205') || message.includes("Could not find the table 'public.produce_listings'")) {
+    return 'The marketplace database schema is not installed in this Supabase project. Apply the FarmLink migrations 202611120001 through 202611120004, then reload the page.'
+  }
+  return message
+}
+
 export default async function MarketplacePage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const rawParams = await searchParams
   const params = Object.fromEntries(Object.entries(rawParams).map(([key, value]) => [key, first(value)])) as Record<string, string | undefined>
@@ -42,7 +49,7 @@ export default async function MarketplacePage({ searchParams }: { searchParams: 
     const page = Math.max(1, Number(params.page) || 1)
     const pageSize = 12
     const result = await query.range((page - 1) * pageSize, page * pageSize - 1)
-    if (result.error) queryError = result.error.message
+    if (result.error) queryError = getQueryErrorMessage(result.error.message)
     else {
       listings = (result.data ?? []) as unknown as ProduceListing[]
       total = result.count ?? 0

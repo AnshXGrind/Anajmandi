@@ -34,6 +34,13 @@ test('location migration and dependent selectors are present', async () => {
   assert.match(picker, /disabled={!stateCode}/)
 })
 
+test('marketplace distinguishes a missing database schema from an empty result', async () => {
+  const marketplace = await readFile('src/app/marketplace/page.tsx', 'utf8')
+  assert.match(marketplace, /PGRST205/)
+  assert.match(marketplace, /database schema is not installed/)
+  assert.match(marketplace, /listings\.length === 0/)
+})
+
 test('offer acceptance does not accept a caller-supplied actor id', async () => {
   const source = await readFile('supabase/migrations/202611120002_harden_farm_link_authorization.sql', 'utf8')
   assert.match(source, /auth\.uid\(\)/)
