@@ -916,8 +916,19 @@ export interface Database {
         Update: Record<string, never>
       }
     }
-    Views: Record<string, never>
-    Functions: Record<string, never>
+    Views: {
+      public_farmer_profiles: {
+        Row: { id: string; full_name: string; verification_status: VerificationStatus; state: string | null; district: string | null }
+        Insert: never
+        Update: never
+      }
+    }
+    Functions: {
+      accept_offer: { Args: { offer_id: string }; Returns: Json }
+      reject_offer: { Args: { offer_id: string }; Returns: undefined }
+      withdraw_offer: { Args: { offer_id: string }; Returns: undefined }
+      get_my_private_profile: { Args: Record<string, never>; Returns: Json }
+    }
     Enums: {
       user_role: UserRole
       verification_status: VerificationStatus

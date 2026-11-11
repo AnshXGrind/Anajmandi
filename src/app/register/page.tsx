@@ -1,2 +1,3 @@
 import { AuthForm } from '@/components/auth-form'
+export const instant = false
 export default async function RegisterPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) { const params = await searchParams; return <main className="auth-wrap"><div className="auth-card"><div className="eyebrow">Join the network</div><h1>Make your next trade direct.</h1><p className="muted">Create a free account for your farm or buying business.</p><AuthForm mode="register" nextPath={params.next}/><p className="auth-note">Already have an account? <a className="arrow-link" href="/login">Log in →</a></p></div></main> }
